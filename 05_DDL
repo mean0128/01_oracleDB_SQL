@@ -1,0 +1,202 @@
+/*
+ *		DDL : 테이블 생성(제약조건), 구조변경, 삭제
+ *			--	자동 커밋 (auto commit)
+ */
+
+--	데이터형
+	--	VARCHAR2(n) 가변 길이 문자 데이터(1~4000byte), 최소크기 1byte 
+	--	CHAR(n) 고정 길이 문자 데이터(1~2000byte) , 최소크기 1byte 
+	--	NUMBER(p,s) 전체 p자리 중 소수점 이하 s자리(p:1~38, s:-84~127) 
+	--	DATE 7Byte(BC 4712년 1월 1일부터 AD 9999년 12월 31일) 
+	--	RAW(n) n Byte의 원시 이진 데이터(1~2000) 
+	--	LONG 가변 길이 문자 데이터(1~2Gbyte) 
+	--	LONG RAW 가변 길이 원시 이진 데이터(1~2Gbyte)
+
+--	의사 컬럼
+	--	실제 테이블에 존재하지 않는 컬럼 
+	-- select와 where절에서만 사용 가능
+	-- 대표적인 의사컬럼 : rownum과 rowid
+		--	rownum : select 된 레코드의 순번(행번호)
+		--	rowid : 주소값(hash) 
+	--	example)	10번까지의 레코드 조회
+	select * from emp;
+	select rownum, empno, ename, rowid	
+	from emp 
+	where rownum <=10;
+	--	example)	5~10번까지의 레코드 조회
+	select rownum, empno, ename, rowid	from emp where rownum <=10 and rownum >=5;	--	조회 불가( 1~n까지는 가능, n1~n2는 불가)
+		--	의사컬럼, 서브쿼리,별칭 결합하여 조회	 : 서브쿼리에서 별칭을 이용하여 select, where 절에 이용
+		select rnum, empno, ename from (select empno,ename,rownum as rnum from emp) where rnum <= 10 and rnum >=5;
+
+--	실수형 데이터 저장 테이블
+create table emp01(
+empno number(4),
+name varchar(20),
+sal number(7,2)	--	(전체, 소숫점)
+);
+
+insert into emp01	values(1,'홍길동',1234.1);
+insert into emp01	values(2,'이순신',1234.123);
+insert into emp01	values(3,'강감찬',1234.125);	--	소수부에서 잘리는 부분은 반올림
+insert into emp01	values(3,'강감찬',123456.12345);	--	정수부에서 초과되므로 오류 발생
+select * from emp01;
+
+--	서브쿼리 이용 테이블 생성 : 기존 테이블과 유사한 테이블 생성할 경우 사용(구조 + 내용 복제)
+create table emp02	--	main
+as	
+select * from emp;	--	sub
+
+select *from emp02;
+
+	--	특정 컬럼 + 내용 복제
+	create table emp03
+	as
+	select empno, ename, sal, comm from emp;	--	emp의 전체 테이블에서 4개의 컬럼만 복제
+	
+	select *from emp03;
+
+		--	example)	emp 테이블의 사원번호, 사원이름, 급여 컬럼을 emp04 테이블에 복사
+		create table emp04
+		as
+		select empno, ename, sal from emp;
+		
+		select  * from emp04;
+		
+		--	example)	특정 행 + 내용 복제하여 테이블 생성
+		create table emp05
+		as
+		select * from emp where deptno = 10;
+		
+		select * from emp05;
+		
+		--	example)	MANAGER 직책 대상으로 emp_test테이블 생성
+		create table emp_test
+		as
+		select * from emp where job = 'MANAGER';
+		
+		select * from emp_test;
+		
+		--	example)	구조에 해당하는 행만 복제하여 테이블 생성
+		create table emp06	
+		as 
+		select * from emp where 1 = 0;	--	where절에 false		
+
+		select * from emp06;
+		
+		--	example)	dept 테이블과 동일한 구조의 빈 dept02 테이블 복제
+		create table dept02
+		as
+		select * from dept where 1=0;
+		
+		select * from dept02;
+		
+		insert into dept02 values(1, '기획실', '대전');		
+		insert into dept02 (select * from dept where deptno = 10);
+		
+--	제약조건(constraint)
+	--	기본키(primary key) : 중복불가(unique), 널 불가(not null)
+		--	column level 제약 조건
+			create table test_tab1(
+			id	number(2) primary key,
+			name varchar(30)
+			);
+
+		--	table level 제약 조건
+			create table test_tab2(
+			id	number(2),
+			name varchar(30),
+			primary key(id)
+			);
+			
+		insert into test_tab1 values(11,'홍길동');
+		insert into test_tab1 values(22,'유관순');
+		insert into test_tab1(name) values('홍길동');		--	오류 발생 : null
+		insert into test_tab1(id, name) values(null,'유관순');	--	오류 발생 : null
+		insert into test_tab1 values(22,'이순신');	--	오류 발생 : unique
+		
+	--	외래키(foreign key) :	특정 테이블의 기본키(!)를 다른 테이블에서 참조하는 키
+		--	example)	기본키 테이블 생성 -> 외래키 테이블 생성
+			--	기본키 테이블 생성 및 내용 입력
+			create table dept_tab(
+			deptno number(2) primary key,	--	기본키!!!
+			dname varchar(10) not null,
+			loc varchar(10) not null
+			);
+			
+			insert into dept_tab values(10, '기획실', '대전');
+			insert into dept_tab values(20, '총무실', '서울');
+			insert into dept_tab values(30, '판매실', '미국');
+			select * from dept_tab;
+			
+			--	외래키 테이블 생성
+			create table emp_tab(
+			empno number(4) primary key,
+			ename varchar(30),
+			sal number(7),
+			deptno number(2) not null,
+			foreign key(deptno) references dept_tab(deptno)	--	외래키
+			);
+			
+			
+			insert into emp_tab values(1111, '홍길동', 1500000, 10);
+			insert into emp_tab values(2222, '이순신', 2500000, 20);
+			insert into emp_tab values(3333, '유관순', 3500000, 30);
+			insert into emp_tab values(4444, '강감찬', 4500000, 40);	--	참조무결성 위배 : 기본키(마스터) 테이블에 없는 내용 입력
+			select * from emp_tab;
+			
+			--	example)	 서브쿼리를 이용하여 사번이 2222인 사원의 부서 정보 출력 : main(dept_tab), sub(emp_tab)
+			select * from dept_tab where deptno = (select deptno from emp_tab where empno = 2222);
+			
+	--	유일키(unique key) : null 허용
+		--	example)
+		create table uni_tab(
+		deptno number(2) unique,
+		dname char(14),
+		loc char(13)
+		);
+		
+		insert into uni_tab values(11, '영업부', '서울');
+		insert into uni_tab values(22, '기획실', '대전');
+		insert into uni_tab(dname,loc) values('기획실2', '대전');
+		
+	--	not null : column level 제약조건만 가능
+		
+	--	check : 특정 컬럼에 조건을 지정하여 맞는지 확인
+		create table ck_tab1(
+		deptno number(2) not null check (deptno in (10,20,30,40,50)),
+		dname char(14),
+		loc char(13)
+		);
+		
+		insert into ck_tab values(10, '회계', '서울');
+		insert into ck_tab values(60, '연구', '대전');	--	check 제약조건 위배
+		insert into ck_tab(dname,loc)  values('회계', '서울');	--	not null 제약조건 위배
+		
+
+--	alter table : 테이블의 구조를 변경
+	--	add : 새로운 컬럼 추가
+		alter table emp01 add (job varchar(9));
+		alter table emp01 add (job2 varchar(9) not null);	--	열이 추가되면 기존 데이터들에 null이 들어가야 하므로
+		
+		--	example)	dept02 테이블에 문자 타입의 부서장(dmgr) 컬럼 추가
+		alter table dept02 add(dmgr varchar(10));
+		select * from dept02;
+		
+		
+	--	modify : 컬럼 수정 (* 컬럼명 수정 불가 -> 컬럼 삭제 후 추가), 데이터 타입이나 크기, 기본값 등을 변경
+		alter table emp01 modify (job varchar(30));
+		--	example)	dept02 테이블의 dmgr 칼럼을 숫자타입으로
+		alter table dept02 modify (dmgr number(10));
+		
+	--	drop : 컬럼 삭제
+		alter table emp01 drop column job;
+		--	example)	dept02 테이블의 dmgr 컬럼 삭제
+		alter table dept02 drop column dmgr;
+		
+--	테이블의 모든 row(레코드, 내용) 제거
+		truncate table emp01;
+		
+--	테이블 삭제
+		drop table emp01 purge;
+		purge recyclebin;	--	임시파일 삭제
+		select * from tab;	--	tab : 의사 테이블		
