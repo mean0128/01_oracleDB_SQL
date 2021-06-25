@@ -37,3 +37,72 @@
 			--	step 4) 	A 테이블 삭제
 		--	강제 테이블 삭제 : drop table 테이블명 cascade constraint;
 			
+--	카르테시안 조인(Cartesial join)
+	--	물리적 join 없이 논리적으로 테이블을 연결
+
+	--	inner Join
+		--	조인 대상의 테이블에 모두 데이터가 존재하는 경우(공통 컬럼이 존재 = 공통 레코드가 있음)
+			--	 example)	student.deptno1  vs  department.deptno 
+				--	oracle 구문
+				select d.dname, d.deptno, s.name, s.deptno1 
+				from student s, department d 	--	두 테이블에 null 없음
+				where s.deptno1 = d.deptno order by d.dname;	--	join 조건
+		
+				--	ansi 표준 구문
+				select d.dname, d.deptno, s.name, s.deptno1 
+				from student s inner join department d 
+				on s.deptno1 = d.deptno order by d.dname;	
+
+			--	example)	student, professor table join
+			--						조인 컬럼 : profno
+			--						s.name,  s.deptno1,  p.name,  p.profno
+			select s.name,  s.deptno1,  p.name,  p.profno
+			from student s inner join professor p
+			on s.profno = p.profno;
+			
+			--	example)	위 테이블에서 101 학과 학생 만 조회
+			select s.name,  s.deptno1,  p.name,  p.profno
+			from student s inner join professor p
+			on s.profno = p.profno and s.deptno = 101;
+
+		--	두 개 이상의 테이블 join
+			--	where A = B, A = C
+			--	example)	student,	department, professor
+			--						s  -  deptno  -  d, s  -  profno  -  p
+		select s.name "학생명", d.dname "부서명", p.name "교수명"
+		from student s, department d, professor p
+		where s.deptno1 = d.deptno and s.profno = p.profno;
+
+	--	outer Join
+		--	두 개 테이블 중 하나의 테이블에 데이터가 존재하는 경우(공통 컬럼에 일부가 레코드가 없거나 다른 경우)
+		--	left outer join	: (+) 없는 컬럼이 기준이 된다.
+			--	student(기준) <- profno <-professor : 왼쪽 기준
+				--	oracle 구문
+				select s.name, s.profno
+				from student s, professor p
+				where s.profno = p.profno(+);
+		
+				--	ansi 표준 구문
+				select s.name, s.profno
+				from student s left outer join professor p
+				on s.profno = p.profno(+);
+		
+		--	right outer join
+			--	student -> profno -> prfoessor(기준) : 오르쪽 기준
+				--	ex) 새로 임용된 교수라 배정된 학생이 없는 경우
+				--	oracle 구문
+				select s.name "학생명", p.name "교수명" 
+				from student s, professor p
+				where s.profno(+) = p.profno;
+				
+				--	ansi 표준 구문
+				select s.name "학생명", p.name "교수명" 
+				from student s right outer join professor p
+				on s.profno(+) = p.profno order by "교수명";
+
+			--	full join : 완전 외부 조인
+				-- student <- professor -> professor
+					--	ansi 표준 구문만 있음
+					select s.name "학생명", p.name "교수명"
+					from student s full outer join professor p
+					on s.profno = p.profno;
