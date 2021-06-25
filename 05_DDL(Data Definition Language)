@@ -199,4 +199,4 @@ select *from emp02;
 --	테이블 삭제
 		drop table emp01 purge;
 		purge recyclebin;	--	임시파일 삭제
-		select * from tab;	--	tab : 의사 테이블		
+		select * from tab;	--	tab : 의사 테이블
