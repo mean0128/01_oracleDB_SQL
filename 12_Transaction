@@ -1,0 +1,43 @@
+--	Transaction
+	--	commit, rollback
+	--	일련의 작업 중 문제 발생 시 원위치
+	--	* eclipse에서는 작업 불가
+	
+  --  Transaction_work.sql	(oracle SQL Developer 에서 작업함)
+
+select * from dept;
+
+--  table 생성
+  create table dept_test
+  as
+  select * from dept;
+  
+--  savepoint
+savepoint s1;
+
+delete from dept_test where deptno = 40;
+select * from dept_test;
+savepoint s2;
+
+delete from dept_test where deptno = 30;
+select * from dept_test;
+savepoint s3;
+
+delete from dept_test where deptno = 20;
+select * from dept_test;
+
+-- 레코드 복원
+rollback to s3;
+select * from dept_test;
+
+rollback to s1;
+select * from dept_test;
+
+--  commit : db에 반영 (rollback 불가)
+  delete from dept_test where  deptno = 40;
+  savepoint s4;
+  commit;
+  
+  delete from dept_test where deptno = 30;
+  rollback to s4;
+  select * from dept_test;
