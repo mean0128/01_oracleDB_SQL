@@ -1,0 +1,99 @@
+/*
+	여러 줄의 주석문
+ */
+
+--	현재 db에 있는 테이블 조회
+select * from tab;
+select * from test;
+
+--	해당 테이블의 전체 열 조회
+select * from emp;
+
+
+-- 해당 테이블의 특정 열 조회
+select empno, ename, sal, job from emp;
+
+
+--	해당 테이블의 특정 열에 산술계산
+select ename, sal, sal+300 from emp;
+select ename, sal, sal*1.1 from emp;
+select ename, sal, comm from emp;
+	--	comm이 null인경우
+	select ename, sal, sal+comm/100 from emp;
+	-- comm이 null인 경우 0으로 처리
+	select ename, sal, sal+nvl(comm,0)/100 from emp;
+	select ename, sal, comm, sal*12+nvl(comm,0) from emp;
+
+
+--	열에 별칭 부여(as)
+select ename as 이름, sal, comm, sal*12+nvl(comm,0) as 실급여 from emp;
+	-- 별칭에 공백이 있는 경우 오류발생
+	select ename as 이름, sal, comm, sal*12+nvl(comm,0) as 실 급여 from emp;	
+	--	별칭에 공백이 있는 경우 처리방법
+	select ename as 이름, sal, comm, sal*12+nvl(comm,0) as "실 급 여" from emp;
+
+	
+--	연결 연산자(||) : 두개 이상의 칼럼을 하나로 연결
+select ename ||' '|| job as employees from emp;
+
+
+--	literal과 string
+	--	'' 안의 문자열을 literal
+	--	"" 안의 문자열을 string
+
+
+--	distinct : 범주형 칼럼 적용 / 중복되는 데이터 제거
+	--	 ex) 성별, 직업 등
+	select job from emp;
+	select distinct job, deptno from emp;
+
+
+--	조건 검색(where) : 특정 행 검색
+	--	산술 조건
+	select ename,sal from emp where sal >= 3000;
+	--	문자 literal	조건
+		-- 문자열 조건(대소문자 구별, 크기비교 불가, 등호만 가능)
+		select ename,sal,job from emp where job = 'manager';
+		select ename,sal,job from emp where job = 'MANAGER';
+		-- 시간 조건 : to_date('문자상수', format) -> 문자상수를 fromat 형식으로 변환
+		select ename,ename,job,sal,hiredate,deptno from emp where hiredate >= to_date('1982/01/01','yyyy/mm/dd');
+	--	between a and b : a와 b사이
+	select ename,sal,job from emp where sal between 1300 and 1600;
+	--	관계 / 논리 연산자 (and, or, 부등호)
+	select ename, sal, job from emp where sal >= 1300 and sal <= 1600;	
+	-- in(list) : list의 값 중 어느 하나와 일치
+	select ename,sal,job from emp where job in('MANAGER', 'SALESMAN');	
+	select ename,sal,job from emp where empno in(7902,7788,7566);
+	-- example
+	select ename,sal,job from emp where hiredate >= to_date('1982/01/01','yyyy/mm/dd') and hiredate <= to_date('1982/12/31','yyyy/mm/dd');
+	select ename,sal,job from emp where hiredate between to_date('1982/01/01','yyyy/mm/dd') and to_date('1982/12/31','yyyy/mm/dd');
+	--	like 연산자: 문자열 검색 시 주로 사용
+	select ename,sal,job,hiredate from emp where hiredate like '87%';	-- 87로 시작하고 뒤의 문자열 아무거나 허용
+	select ename,sal,job,hiredate from emp where hiredate like '%87%';	-- 87로 된 문자열 전체 허용
+	select ename,sal,job,hiredate from emp where hiredate like '%87';	-- 87로 끝나고 앞의 문자열 아무거나 허용
+	select ename,sal,job,hiredate from emp where hiredate like '%01';
+	-- example) deptno 가 10이고, sal 이 2500이상
+	select * from emp where deptno = 10 and sal >= 2500;
+	--	example) job이 CLERK 이거나, deptno가 30
+	select * from emp where job = 'CLERK' or deptno = 30;
+	--	is null 연산자
+	select * from emp where comm is null;
+	select * from emp where comm is not null;
+
+	--	검색 레코드 정렬 : default 오름차순 (작은 -> 큰)
+		--	숫자 : 1 -> 9
+		--	날짜 : 2010 -> 2020
+		--	문자 : A -> Z -> a -> z -> null
+		-- default(오름차순) 확인	
+		select * from emp order by hiredate;
+		--	내림차순 확인
+		select * from emp order by hiredate desc;
+		--	5번째 column으로 정렬			
+		select empno,ename,job,sal,sal*12 연봉 from emp order by 연봉;
+		select empno,ename,job,sal,sal*12 연봉 from emp order by sal*12;
+		select empno,ename,job,sal,sal*12 연봉 from emp order by 5;
+		--	두개 이상의 column으로 정렬
+			--	테이블에 있는 column의 갯수까지만 가능
+			--	order by 절에서 열을 명시, 열 이름은 콤마로 구분
+			--	select에 포함되지 않는 열로 정렬 가능
+		select deptno,sal,empno,ename,job from emp order by deptno desc, job, sal desc;
