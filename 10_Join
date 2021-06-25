@@ -1,0 +1,39 @@
+--	Join
+	--	특정 컬럼(외래키)를 이용하여 두 개 이상의 테이블을 연결하는 db 기법
+		--	조인 생성
+			--	step 1)	기본키를 갖는 테이블 A 생성
+			create table product(
+			code char(4) primary key,	--	상품 코드
+			name varchar(30) not null	--	상품명
+			);
+			--	step 2)	A에 레코드 추가
+			insert into product values('p001','냉장고');
+			insert into product values('p002','세탁기');
+			insert into product values('p003','전화기');				
+			
+			--	step 3)	외래키를 갖는 테이블 B 생성
+			create table sale(
+			code char(4) not null,
+			sdate date not null,
+			price int not null,
+			foreign key(code) references product(code)
+			);			
+			--	step 4)	B에 레코드 추가
+			insert into sale values('p001', '2020/02/24', 850000);
+			insert into sale values('p002', '2020/02/25', 550000);			
+			insert into sale values('p003', '2020/02/26', 150000);
+			select * from sale;			
+			commit work;
+			
+			--	step 5)	join 이용 데이터 조회
+			select p.code, p.name, s.sdate, s.price
+			from product p, sale s 
+			where p.code = s.code and p.name like '%기';
+			
+		--	조인 삭제 : 생성 의 역순
+			--	step 1)	B 레코드 삭제
+			--	step 2)	B 테이블 삭제
+			--	step 3)	A 레코드 삭제
+			--	step 4) 	A 테이블 삭제
+		--	강제 테이블 삭제 : drop table 테이블명 cascade constraint;
+			
