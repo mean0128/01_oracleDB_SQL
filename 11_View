@@ -1,0 +1,113 @@
+create table db_view_tab(
+id varchar(20) primary key,
+name varchar(20) not null,
+email varchar(50),
+regdate date not null
+);
+
+insert into db_view_tab
+		values('hong','gildong','hong@naver.com', sysdate);
+insert into db_view_tab
+		values('admin','istartor','admin@naver.com', sysdate);
+select * from db_view_tab;
+commit work;
+
+	--	making vew : using subquery
+	create view admin_view
+	as
+	select * from db_view_tab 
+	where id = 'admin';	--	physical table
+
+/*		it can not create view because of no privileges when user made
+		in sql command) conn system/1234;
+		in sql command) grant create view to scott;
+*/
+	
+	--	modifying
+	create or replace view admin_view
+	as
+	select * from db_view_tab
+	where id = 'admin' with read only;
+	
+	--	showing list of view 
+	select * from user_views;
+	--	showing view
+	select * from admin_view;
+	
+	--	deleting view
+	drop view admin_view;
+	
+	-- *when you delete recode from view, original table record will be deleted by view too.
+	
+	--	example)
+	create or replace view emp_view30
+	as
+	select empno, ename, deptno
+	from emp
+	where deptno = 30;
+	
+	create or replace view emp_view30
+	as
+	select empno, ename, deptno
+	from emp
+	where deptno = 30 with read only;
+
+	select * from emp_view30;	
+	
+--	purpose of using view
+	--	complicated sql
+	--	for security : to respectively give users infomation with granted access grade
+	
+	--	example)	complicated sql
+	create or replace view join_view
+	as
+	(select  p.code, p.name, s.price, s.sdate
+	from product p, sale s
+	where p.code = s.code and p.name like '%기')
+	with read only;
+	
+	select * from join_view;
+	
+	--	example)	접근 권한에 따라서 서로 다르게 정보 제공
+	select * from emp;
+		--	example)	영업사원에게 제공하는 view
+		create or replace view sales_view
+		as
+		(select empno, ename, comm 
+		from emp
+		where job = 'SALESMAN')
+		with read only;
+		
+		select * from sales_view;
+		
+		delete from sales_view where empno = 7499;
+		
+		--	일반사원에게 제공하는 view
+		create or replace view clerk_view
+		as
+		(select empno, ename, mgr
+		from emp
+		where job = 'CLERK')
+		with read only;		
+		select * from clerk_view;
+		
+		--	관리자에게 제공하는 view
+		select * from emp;
+		create or replace view manager_view
+		as
+		(select * from emp where job in('SALESMAN', 'CLERK', 'ANALYST'))
+		with read only;
+		
+		--	using rownum
+		select rownum, empno, ename from emp
+		where rownum <=5;
+		
+		--	regdate top5 view
+		create or replace view top5_hire_view
+		as
+		select empno, ename, hiredate from emp
+		where rownum <=5 
+		order by hiredate asc
+		with read only;
+
+		select * from top5_hire_view;
