@@ -1,0 +1,59 @@
+--	그룹 함수 : 하나 이상의 행을 연산하여 총합, 평균 등으로 나타냄
+
+	--	sum : null 무시
+	select sum(comm) from emp;
+	--	avg : null 무시
+	select round(avg(sal),3) from emp;
+	select avg(comm) from emp;
+	select avg(nvl2(comm,comm,0)) from emp;
+	--	count
+	select count(comm) from emp;
+	select count(hpage) from professor;
+		--	전체 컬럼의 갯수 : 조회할 컬럼에 asterisk(*) 사용
+		select count(*) from professor;
+		--	example)	emp 테이블에서 comm을 받는 사원의 수 출력
+		select count(comm) from emp;		
+		--	example)	emp 테이블에서 10번 부서 소속 사원 중 comm을 받는 사람의 수
+		select count(comm) from emp where deptno = 10;
+		--	example)	'SCOTT'과 같은 부서에 근무하는 사원들의 급여의 합, 평균
+		select sum(sal), avg(sal) from emp where deptno = (select deptno from emp where ename = 'SCOTT');
+		--	중복된 데이터 제거하여 범주 갯수 확인
+		select count(distinct job) from emp;
+				
+	--	min, max : null 무시
+	select min(comm), max(comm) from emp;	
+	--	variance
+	select variance(sal) from emp;
+	--	stddev	
+	select stddev(sal), sqrt(variance(sal)) from emp;
+	
+
+--	2.	group by절 : 동일한 집단별로 묶어서 집단별 데이터를 구함
+	select deptno,avg(sal) from emp group by deptno;
+	--	example)	각 부서별 급여 조회
+	select deptno, sum(sal), round(avg(nvl(comm,0)),0) from emp where deptno in(10,20) group by deptno;
+	select deptno, max(sal), min(sal) from emp group by deptno;
+	--	example)	교수의 직급별 평균
+	select * from professor;
+	select position, round(avg(pay),0) from professor group by position;
+		--	개별 레코드가 조회될 수 있는 컬럼을 셀렉트하면 조회 안되므로 주의
+		select name, position, avg(pay) from professor group by position;
+
+		
+--	3. having절 : select 절의 조건을 제한할 때는 where절을 사용하지만, group by의 결과를 제한할 때는 HAVING 절 사용. 사용법은 where 와 같음
+		select deptno, avg(sal) from emp group by deptno having avg(sal) >= 2000;
+		select deptno, avg(sal) from emp group by deptno having deptno in (10, 20);
+		--	example) 부서별 급여의 최댓값과 최솟값을 구하되 최솟값이 900이상인 부서만 출력
+		select deptno, max(sal), min(sal) from emp group by deptno having min(sal) >= 900
+		
+--	example)	student 테이블에서 grade별 weight 평균이 60이상인 학생 조회
+	--	학년별 조회
+	select grade, avg(weight) from student group by grade having avg(weight) >= 60;
+	--	학생별 조회
+	select * from student where grade in (select grade from student group by grade having avg(weight) >= 60); 
+	
+--	example)	professor 테이블에서 deptno별 pay의 평균이 300 미만인 교수 정보 조회
+	--	deptno별 조회
+	select deptno, avg(pay) from professor group by deptno having avg(pay) < 300;
+	--	교수별 조회
+	select * from professor where deptno in (select deptno from professor group by deptno having avg(pay) < 300);
