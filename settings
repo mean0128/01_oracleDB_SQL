@@ -16,10 +16,10 @@
     grant connect, resource, plustrace, alter session to 유저명
   유저로 접속
     conn 유저명/비밀번호
-  유저 잠금 해제
+  *, 유저 잠금 해제
     conn /as sysdba 또는 conn system/1234(초기 설치시 세팅하게 되어있음)
     alter user 유저명 account unlock;
-  유저 암호 변경
+  *, 유저 암호 변경
     alter user 유저명 identified by 변경할 암호
 
 4, Eclipse 설치 및 설정
@@ -41,7 +41,7 @@
   인코딩 설정
     window → Preferences → General → workspace → Other: UTF-8
   
-  DB 연결안된 경우 
+  *, DB 연결안된 경우 해결방법
     우측 상단 Database Development 클릭 → New Oracle 우클릭 → Connect
   
 5, SQL developer 설치 : 테이블 시각화, 엑셀 load & Save
