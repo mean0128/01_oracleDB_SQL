@@ -1,0 +1,23 @@
+jdk 설치
+  jdk-8u151-windows-x64
+
+oracle Express Editiong 11g 설치
+  https://developer.oracle.com/databases/
+  11.2.0.1.0버전으로 default설치
+
+DB실행 및 설정
+  Run SQL Command line 실행
+  관리자 접속
+    conn /as sysdba
+  create user 유저명 idenfied by 비밀번호
+  default tablespace users
+  temporary tablesapce temp;
+  유저에 권한 부여
+    grant connect, resource, plustrace, alter session to 유저명
+  유저로 접속
+    conn 유저명/비밀번호
+  유저 잠금 해제
+    conn /as sysdba 또는 conn system/1234(초기 설치시 세팅하게 되어있음)
+    alter user 유저명 account unlock;
+  유저 암호 변경
+    alter user 유저명 identified by 변경할 암호
