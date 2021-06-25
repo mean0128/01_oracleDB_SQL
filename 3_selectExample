@@ -4,10 +4,10 @@
 -- 연습용 테이블 작성
 	-- 부서 테이블 
 	create table DEPT(
-	deptno int,           -- 부서번호
-	dname varchar(14),   -- 부서명
-	loc varchar(13),     -- 지역
-	primary key(deptno) -- 부서번호(기본키) 지정 
+		deptno int,         -- 부서번호
+		dname varchar(14),  -- 부서명
+		loc varchar(13),    -- 지역
+		primary key(deptno)	-- 부서번호(기본키) 지정 
 	);
 	insert into dept(deptno, dname,loc) values(10,'ACCOUNTING','NEW YORK');
 	insert into dept(deptno, dname,loc) values(20,'RESEARCH','DALLAS');
@@ -46,17 +46,17 @@
 	-- 교수 테이블 
 	drop table professor ;
 	create table professor(
-				profno number(4) primary key,    -- 교수번호(기본키)
-	 			name  varchar2(10) not null, 
-	 			id  varchar2(15) not null,
-	 			position varchar2 (15) not null, -- 직위(전임강사,조/부/정교수) 
-	 			pay number(3) not null,
-	 			hiredate  date not null,       
-	 			bonus number(4) ,             
-	 			deptno  number(3),               -- 학과번호          
-	 			email  varchar2(50),
-	 			hpage  varchar2(50)              -- 홈페이지 주소          
-				);
+		profno number(4) primary key,    -- 교수번호(기본키)
+		name  varchar2(10) not null, 
+		id  varchar2(15) not null,
+		position varchar2 (15) not null, -- 직위(전임강사,조/부/정교수) 
+		pay number(3) not null,
+		hiredate  date not null,       
+		bonus number(4) ,             
+		deptno  number(3),               -- 학과번호          
+		email  varchar2(50),
+		hpage  varchar2(50)              -- 홈페이지 주소          
+	);
 	insert into professor
 	values(1001,'조인형','captain','정교수',550,to_date('1980-06-23','YYYY-MM-DD'),100,101,'captain@abc.net','http://www.abc.net');
 	insert into professor
@@ -94,18 +94,18 @@
 	-- 학생 테이블 
 	drop table student purge; -- 테이블 제거(휴지통 거치지 않고 삭제)
 	create table student( 
-	  studno number(4) primary key,              -- 
-	  name   varchar2(10) not null,
-	  id varchar2(20) not null unique,           -- NULL/중복불가 
-	  grade number check(grade between 1 and 6), -- 1~6사이의 값만 입력 받을 수 있음
-	  jumin char(13) not null,          
-	  birthday  date,                   
-	  tel varchar2(15),
-	  height  number(4),                
-	  weight  number(3),                
-	  deptno1 number(3),    -- 주전공            
-	  deptno2 number(3),    -- 부전공            
-	  profno  number(4)     -- 지도교수            
+		studno number(4) primary key,
+		name   varchar2(10) not null,
+		id varchar2(20) not null unique,           -- NULL/중복불가 
+		grade number check(grade between 1 and 6), -- 1~6사이의 값만 입력 받을 수 있음
+		jumin char(13) not null,          
+		birthday  date,                   
+		tel varchar2(15),
+		height  number(4),                
+		weight  number(3),                
+		deptno1 number(3),    -- 주전공            
+		deptno2 number(3),    -- 부전공            
+		profno  number(4)     -- 지도교수            
 	);  
 	insert into student values (
 	9411,'서진수','75true',4,'7510231901813',to_date('1975-10-23','YYYY-MM-DD'),'055)381-2158',180,72,101,201,1001);
@@ -151,11 +151,11 @@
 
 	-- 학과 테이블
 	drop table department purge;
-	create table department
-	( deptno number(3) primary key , 
-	  dname varchar2(30) not null,   
-	  part number(3),                 
-	  build  varchar2(20)           -- 건물명          
+	create table department(
+		deptno number(3) primary key , 
+		dname varchar2(30) not null,   
+		part number(3),                 
+		build  varchar2(20)           -- 건물명          
 	);
 	insert into department values (101,'컴퓨터공학과',100,'정보관');
 	insert into department values (102,'멀티미디어공학과',100,'멀티미디어관');
@@ -173,12 +173,12 @@
 
 	-- 선물 테이블
 	drop table dept cascade constraint;  
-	drop table gift purge ;
-	create table gift( 
-	  gno  number,           -- 상품번호
-	  gname varchar2(20) ,   -- 상품명
-	  g_start  number ,      -- 시작 번호
-	  g_end  number          -- 끝 번호 
+	drop table gift purge;
+	create table gift(
+		gno  number,           -- 상품번호
+		gname varchar2(20) ,   -- 상품명
+		g_start  number ,      -- 시작 번호
+		g_end  number          -- 끝 번호 
 	);
 	insert into gift values(1,'참치세트',1,100000);
 	insert into gift values(2,'샴푸세트',100001,200000);
