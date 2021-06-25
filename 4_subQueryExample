@@ -126,22 +126,29 @@
 	insert into department values (10,'공과대학',null,null);
 	insert into department values (20,'인문대학',null,null);
 	select * from department; -- 레코드 12개
+	
+	-- DB 반영
+		commit work;
+
+	-- table 목록 조회
+		select * from tab;
+		select TNAME from tab;
 
 -- 연습용 문제
-  -- 문) STUDENT 테이블 검색 결과(sub)를 이용하여 STUDENT01 테이블 생성(main) 
-  -- Sub(STUDENT), Main(STUDENT01)
-    create table student01 as select * from student; 	
+	-- 문) STUDENT 테이블 검색 결과(sub)를 이용하여 STUDENT01 테이블 생성(main) 
+  	-- Sub(STUDENT), Main(STUDENT01)
+	    create table student01 as select * from student; 	
 
-  -- 문) 교수번호가 2001인 지도교수를 모시는 전체 학생 명부 출력
-  -- Sub(PROFESSOR), Main(STUDENT01)
-    select * from student01;
-    select * from student01 where profno = (select profno from professor where profno = 2001);
+	-- 문) 교수번호가 2001인 지도교수를 모시는 전체 학생 명부 출력
+	-- Sub(PROFESSOR), Main(STUDENT01)
+		select * from student01;
+    	select * from student01 where profno = (select profno from professor where profno = 2001);
 
-  -- 문) 보너스를 받는 교수들의 이름, 직위, 급여, 보너스 출력
-  -- 조건)   IN()함수 이용 : 다중 행 처리  
-    select *from PROFESSOR;
-    select name, position, pay, bonus from professor where bonus in (select bonus from professor where bonus > 0 and bonus is not null);
+	-- 문) 보너스를 받는 교수들의 이름, 직위, 급여, 보너스 출력
+	-- 조건)   IN()함수 이용 : 다중 행 처리  
+		select *from PROFESSOR;
+		select name, position, pay, bonus from professor where bonus in (select bonus from professor where bonus > 0 and bonus is not null);
 
-  -- 문) 301 학과(DEPTNO) 교수들 보다 더 많은 급여를 받는 교수들의 이름, 직위, 급여, 학과 출력
-  -- 조건) ALL()함수 이용 : 다중 행 처리 
-    select name, position, pay, deptno from professor where pay > all (select pay from professor where deptno = 301);
+	-- 문) 301 학과(DEPTNO) 교수들 보다 더 많은 급여를 받는 교수들의 이름, 직위, 급여, 학과 출력
+	-- 조건) ALL()함수 이용 : 다중 행 처리 
+		select name, position, pay, deptno from professor where pay > all (select pay from professor where deptno = 301);
