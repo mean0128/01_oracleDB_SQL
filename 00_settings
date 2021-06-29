@@ -30,8 +30,9 @@
     alter user 유저명 identified by 변경할 암호
 
 4, Eclipse 설치 및 설정
-  https://www.eclipse.org/downloads/packages/release/oxygen/2/eclipse-ide-java-ee-developers
-  eclipse-jee-oxygen-2-win32-x86_64.zip 압축 해제 후 Eclipse 실행
+    https://www.eclipse.org/downloads/packages/release/oxygen/2/eclipse-ide-java-ee-developers
+    eclipse-jee-oxygen-2-win32-x86_64.zip 압축 해제(c:\\에 추천)
+    압축 해제된 폴더로 가서 eclipse 실행
 
   DB설정
     우측 상단 Open Perspective → Database Development → Data Source Explorer → Database Connections 우클릭 → 
