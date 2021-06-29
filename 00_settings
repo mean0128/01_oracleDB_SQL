@@ -31,7 +31,7 @@
 
 4, Eclipse 설치 및 설정
   https://www.eclipse.org/downloads/packages/release/oxygen/2/eclipse-ide-java-ee-developers
-  edipse-jee-oxygen-2-Win32-X86-64.zip 압축 해제 후 Eclipse 실행
+  eclipse-jee-oxygen-2-win32-x86_64.zip 압축 해제 후 Eclipse 실행
 
   DB설정
     우측 상단 Open Perspective → Database Development → Data Source Explorer → Database Connections 우클릭 → 
