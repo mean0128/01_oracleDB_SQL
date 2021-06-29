@@ -58,7 +58,10 @@
     Window → Preferences → General → workspace → Other: UTF-8
   
   글자 크기 설정
-  Window → Preferences → General → Appearance → Colors and Fonts → basic → Text Font → Edit
+    Window → Preferences → General → Appearance → Colors and Fonts → basic → Text Font → Edit
+  
+  SQL Result 설정
+    SQL Result탭의 우측 상단 → Preferences → Single window, Grid mode로 선택
   
   *, DB 연결안된 경우 해결방법
     우측 상단 Database Development 클릭 → New Oracle 우클릭 → Connect
