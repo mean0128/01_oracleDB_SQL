@@ -60,7 +60,7 @@
   글자 크기 설정
     Window → Preferences → General → Appearance → Colors and Fonts → basic → Text Font → Edit
   
-  SQL Result 설정
+  SQL Result 설정(검색한 결과를 테이블형태로 유지되게 하기 위하여)
     SQL Result탭의 우측 상단 → Preferences → Single window, Grid mode로 선택
   
   *, DB 연결안된 경우 해결방법
