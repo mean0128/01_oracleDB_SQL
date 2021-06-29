@@ -43,7 +43,7 @@
   DB설정
     우측 상단 Open Perspective → Database Development → Data Source Explorer → Database Connections 우클릭 → 
     NeW → Oracle 선택 → Drivers 우측 New Driver Definition 작은 아이콘 선택 → Name/Type 에서 Oracle Thin Driver 11 →
-    JAR List에서 Add c:/oracleexe/app/oracle/product/11.2.O/server/jdbc/lib/ojdbc6.jar 선택 →
+    JAR List에서 Add c:/oracleexe/app/oracle/product/11.2.O/server/jdbc/lib/ojdbc6.jar 선택후 나머지 제거 →
     Service Name : xe, Host : locaHost, Username : 유저명 PassWord : 비밀번호, save password 체크
 
   Project 생성
