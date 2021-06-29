@@ -48,7 +48,8 @@
 
   Project 생성
     우측 상단 JavaEE → Project Explorer → NeW → Other → Web : Dynamic Web Project → Name : 작업할 폴더명
-
+    * Project Explorer 안보일경우 : Window → Show View → Project Explorer 선택
+    
   폴더 및 파일 생성 
     우측 상단 JavaEE → Project Explorer → Web Content폴더 우클릭 → NEW : Folder → 폴더명 입력 → 생성된 폴더 우클릭 →
     NEW : SQL File → 파일명 입력 → 파일 더블클릭 → 상단 Connection Profile : Type=Oracle 11, Name=NEW Oracle, Databasee=xe
