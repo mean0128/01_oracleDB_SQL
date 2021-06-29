@@ -55,7 +55,7 @@
     NEW : SQL File → 파일명 입력 → 파일 더블클릭 → 상단 Connection Profile : Type=Oracle 11, Name=NEW Oracle, Databasee=xe
   
   인코딩 설정
-    window → Preferences → General → workspace → Other: UTF-8
+    Window → Preferences → General → workspace → Other: UTF-8
   
   *, DB 연결안된 경우 해결방법
     우측 상단 Database Development 클릭 → New Oracle 우클릭 → Connect
