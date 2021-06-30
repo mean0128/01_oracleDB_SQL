@@ -50,6 +50,9 @@ desc member; -- 편집기에 실행 불가(command line에서 확인)
 alter table member drop column reg_date;
 select * from member;
 
+--  e) 테이블 칼럼명 변경
+--    형식) alter table 테이블명 rename column 원본칼럼명 to 변경할칼럼명;
+
 --	3) Table 제거 
 --		형식) drop table 테이블명 purge;
 --		purge 속성 : 임시파일 제거 
